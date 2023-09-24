@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<!-- https://stackoverflow.com/questions/22661244/declaring-list-inside-a-model-->
+
+
+<h2>Danh sách chủ đề</h2>
+<table border="1" width="500">
+
+    <tr>
+        <th>Mã CD</th>
+        <th>Tên chủ đề</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.MaCD </td>
+            <td>@item.TenChuDe</td>
+        </tr>
+    }
+
+</table>
+
