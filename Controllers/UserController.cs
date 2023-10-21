@@ -39,7 +39,7 @@ namespace NguyenAnhTuanSachOnline.Controllers
             else
             {
                 KHACHHANG kh = db.KHACHHANGs.SingleOrDefault(
-                    n => n.TaiKhoan == sTenDN && n.MatKhau == GetMD5(sMatKhau)
+                    n => n.TaiKhoan == sTenDN && n.MatKhau == (sMatKhau)
                 );
                 if (kh != null)
                 {
@@ -67,27 +67,15 @@ namespace NguyenAnhTuanSachOnline.Controllers
                     ViewBag.ThongBao = "Tên đăng nhập hoặc mật khẩu không đúng";
                 }
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "SachOnline");
         }
 
         public ActionResult DangXuat()
         {
             Session["TaiKhoan"] = null;
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "SachOnline");
         }
 
-        public static string GetMD5(string str)
-        {
-            MD5 md5 = new MD5CryptoServiceProvider();
-            byte[] fromData = Encoding.UTF8.GetBytes(str);
-            byte[] targetData = md5.ComputeHash(fromData);
-            string byte2String = null;
-            for (int i = 0; i < targetData.Length; i++)
-            {
-                byte2String += targetData[i].ToString("x2");
-            }
-            return byte2String;
-        }
     }
 
 }

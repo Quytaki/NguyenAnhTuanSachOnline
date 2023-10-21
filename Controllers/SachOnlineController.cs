@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using NguyenAnhTuanSachOnline.Models;
+using PagedList;
+using PagedList.Mvc;
+using System.Web.UI.WebControls;
+using System.Web.UI;
 
 namespace NguyenAnhTuanSachOnline.Controllers
 {
@@ -11,6 +16,14 @@ namespace NguyenAnhTuanSachOnline.Controllers
         private DataClasses1DataContext dbContext = new DataClasses1DataContext();
 
         private DataClasses1DataContext data;
+        private List<SACH> LaySachMoi(int count)
+        {
+            return data.SACHes.OrderByDescending(a => a.NgayCapNhat).Take(count).ToList();
+        }
+        private List<SACH> LaySachBanNhieu(int count)
+        {
+            return data.SACHes.OrderByDescending(a => a.SoLuongBan).Take(count).ToList();
+        }
 
         public SachOnlineController()
         {
@@ -18,9 +31,12 @@ namespace NguyenAnhTuanSachOnline.Controllers
         }
 
         // GET: SachOnline
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            return View();
+            int pageSize = 6;
+            int pageNum = (page ?? 1);
+            var listSachMoi = LaySachMoi(20);
+            return View(listSachMoi.ToPagedList(pageNum, pageSize));
         }
         public ActionResult ChuDePartial()
         {
@@ -35,10 +51,24 @@ namespace NguyenAnhTuanSachOnline.Controllers
         {
             return PartialView();
         }
+        public ActionResult SachBanNhieuPartial()
+        {
+            var listSachBanNhieu = LaySachBanNhieu(6);
+            return PartialView(listSachBanNhieu);
+        }
+        public ActionResult NhaXuatBanPartial()
+        {
+            var listNxb = data.NHAXUATBANs;
+            return PartialView(listNxb);
+        }
+        public ActionResult FooterPartial()
+        {
+            return PartialView();
+        }
         public ActionResult SachBanNhieu()
         {            
              // lấy ra 3 cuốn sách bán chạy nhất
-                List<SACH> danhSachSachBanNhieu = dbContext.SACHs.OrderByDescending(s => s.SoLuongBan).Take(3).ToList();
+                List<SACH> danhSachSachBanNhieu = dbContext.SACHs.OrderByDescending(s => s.SoLuongBan).Take(6).ToList();
                 return PartialView(danhSachSachBanNhieu);        
         }
 
@@ -49,8 +79,25 @@ namespace NguyenAnhTuanSachOnline.Controllers
             return PartialView(danhSachNhaXuatBan);
         }
         public ActionResult Chitiet()
-        {             return View();
+        {  
+            return View();
         }
-        
+
+        public ActionResult ChiTietSach(int id)
+        {
+            var sach = from s in data.SACHs
+                       where s.MaSach == id
+                       select s;
+            return View(sach.Single());
+        }
+        public ActionResult SachTheoCD(int id, int? page)
+        {
+            ViewBag.MaCD = id;
+            int pageSize = 3;
+            int pageNum = (page ?? 1);
+            var sach = data.SACHes.Where(s => s.MaCD == id);
+            return View(sach.ToPagedList(pageNum, pageSize));
+        }
+
     }
 }

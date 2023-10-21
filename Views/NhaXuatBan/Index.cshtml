@@ -2,13 +2,12 @@
 
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_LayoutUser.cshtml";
 }
 
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Tạo mới","ThemNXB","NhaXuatBan")
+    @Html.ActionLink("Tạo mới","Create","NhaXuatBan")
 </p>
 <table class="table">
     <tr>
@@ -26,7 +25,6 @@
 
     @foreach (var item in Model)
     {
-        <a href="~/NhaXuatBan/Details.cshtml?id=@item.MaNXB">Chi Tiết</a>
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.TenNXB)
@@ -38,7 +36,7 @@
                 @Html.DisplayFor(modelItem => item.DienThoai)
             </td>
             <td>
-                @Html.ActionLink("Sửa", "Edti", new { id = item.MaNXB }) |
+                @Html.ActionLink("Sửa", "Edit", new { id = item.MaNXB }) |
                 @Html.ActionLink("Chi Tiết", "Details", "NhaXuatBan", new { id = item.MaNXB }, null) |
                 @Html.ActionLink("Xóa", "Delete", new { id = item.MaNXB })
             </td>
